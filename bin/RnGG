@@ -1,0 +1,24 @@
+#!/usr/bin/env ruby
+require_relative '../lib/RnGG/game'
+module RnGG
+berserker = RnGG::BerserkPlayer.new("berserker", 50)
+
+knuckleheads = RnGG::Game.new("Knuckleheads")
+default_player_file = File.join(File.dirname(__FILE__), 'players.csv')
+knuckleheads.load_players(ARGV.shift || default_player_file)
+knuckleheads.addplayer(berserker)
+loop do
+  puts "\nHow many game rounds? ('quit' to exit)"
+  answer = gets.chomp.downcase
+    case answer
+      when /^\d+$/
+        knuckleheads.play(answer.to_i)
+      when "exit", "quit"
+        knuckleheads.print_stats
+        knuckleheads.save_high_scores
+        break
+      else
+        puts "Invalid entry: please input a number of rounds or quit"
+    end
+end
+end
